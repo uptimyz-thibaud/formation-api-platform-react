@@ -8,9 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource
+ * @UniqueEntity("email", message="MYTHO! quelqu'un a déjà cet adresse email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -18,32 +24,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"customers_read", "invoices_read"})
+     * @Assert\NotBlank(message="l'email doit être renseigné!")
+     * @Assert\Email(message="l'adresse email doit avoir une bonne gueule")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="le mot de passe doit être renseigné!")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoices_read"})
+     * @Assert\NotBlank(message="le prénom doit être renseigné!")
+     * @Assert\Length(min=3, minMessage="Le prénom doit faire  entre 3 et 255 caractères",
+     * max=255, maxMessage="arrête de fracasser ton clavier ptit con")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoices_read"})
+     * @Assert\NotBlank(message="le nom de famille doit être renseigné!")
+     * @Assert\Length(min=3, minMessage="Le prénom doit faire  entre 3 et 255 caractères",
+     * max=255, maxMessage="arrête de fracasser ton clavier ptit con")
      */
     private $lastName;
 
