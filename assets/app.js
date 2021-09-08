@@ -8,7 +8,10 @@ import HomePage from "./pages/HomePage";
 import {HashRouter, Switch, Route} from "react-router-dom";
 import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";
+import LoginPage from "./pages/LoginPage";
+import authAPI from "./services/authAPI";
 
+//authAPI.setup();
 
 const App = () => {
     return (
@@ -17,6 +20,7 @@ const App = () => {
 
         <main className="container pt-5">
             <Switch>
+                <Route path="/login" component={LoginPage} />
                 <Route path="/invoices" component={InvoicesPage} />
                 <Route path="/customers" component={CustomersPage} />
                 <Route path="/" component={HomePage} />

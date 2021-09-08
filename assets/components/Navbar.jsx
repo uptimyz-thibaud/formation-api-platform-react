@@ -1,34 +1,41 @@
 import React from "react";
+import authAPI from "../services/authAPI";
+import {NavLink} from "react-router-dom";
 
 const Navbar = (props) => {
+
+    const handleLogout = () => {
+        authAPI.logout();
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-            <a className="navbar-brand" href="#">SymReact !</a>
+            <NavLink className="navbar-brand" to="/">SymReact !</NavLink>
             <div className="collapse navbar-collapse" id="navbarColor03">
                 <ul className="navbar-nav me-auto">
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Pigeons</a>
+                        <NavLink className="nav-link" to="/customers">Pigeons</NavLink>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Impôts</a>
+                        <NavLink className="nav-link" to="/invoices">Impôts</NavLink>
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                        <a href="#" className="btn btn-primary">
+                        <NavLink to="/register" className="btn btn-primary">
                             Inscription
-                        </a>
+                        </NavLink>
                     </li>
                     <li className="nav-item">
-                        <a href="#" className="btn btn-secondary">
+                        <NavLink to="/login" className="btn btn-secondary">
                             Connexion !
-                        </a>
+                        </NavLink>
                     </li>
                     <li className="nav-item">
-                        <a href="#" className="btn btn-danger">
+                        <button onClick={handleLogout} className="btn btn-danger">
                             Déconnexion
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </div>
