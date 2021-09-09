@@ -10,6 +10,9 @@ import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";
 import LoginPage from "./pages/LoginPage";
 import authAPI from "./services/authAPI";
+import Customerpage from "./pages/Customerpage";
+import InvoicePage from "./pages/InvoicePage";
+import RegisterPage from "./pages/RegisterPage";
 
 //authAPI.setup();
 
@@ -20,7 +23,10 @@ const App = () => {
 
         <main className="container pt-5">
             <Switch>
+                <Route path="/customers/:id" component={Customerpage} />
+                <Route path="/register" component={RegisterPage} />
                 <Route path="/login" component={LoginPage} />
+                <Route path="/invoices/:id" component={InvoicePage} />
                 <Route path="/invoices" component={InvoicesPage} />
                 <Route path="/customers" component={CustomersPage} />
                 <Route path="/" component={HomePage} />

@@ -52,7 +52,7 @@ class Invoice
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"invoices_read", "customers_read"})
-     * @Assert\NotBlank(message="La date d'envoie doit être reneignée")
+     * @Assert\NotBlank(message="La date d'envoie doit être renseignée")
      */
     private $sentAt;
 
