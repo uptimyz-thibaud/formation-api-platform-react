@@ -6,6 +6,7 @@ import customersAPI from "../services/customersAPI";
 import axios from "axios";
 import {toast, ToastContainer} from "react-toastify";
 import TableLoader from "../components/loaders/TableLoader";
+import { INVOICES_API} from "../config";
 
 const InvoicePage = (props) => {
 
@@ -48,7 +49,7 @@ const InvoicePage = (props) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/invoices", {...invoice, customer: `api/customers/${invoice.customer}`});
+            const response = await axios.post(INVOICES_API, {...invoice, customer: `api/customers/${invoice.customer}`});
             console.log(response);
             toast.success("l'impôt a bien été enregistré");
 

@@ -59,7 +59,7 @@ const InvoicesPage = (props) => {
            await InvoicesAPI.delete(id);
            toast.success("l'impôt a bien été supprimé");
         } catch(error) {
-            toast.error("une erruer est survenue");
+            toast.error("une erreur est survenue");
             setInvoices(originalInvoices);
         }
     };
