@@ -2,11 +2,13 @@ import React, {useState, useEffect} from "react";
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 import customersAPI from "../services/customersAPI";
+import {toast} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 const Customerpage = ({match, history}) => {
 
     const { id = "new" } = match.params;
-
+    const [loading, setLoading] = useState(false);
 
     const [customer, setCustomer] = useState({
         lastName: "",
@@ -27,8 +29,9 @@ const Customerpage = ({match, history}) => {
     //récupération du client en fonction de l'identifiant
     const fetchCustomer = async id => {
         try {
-        const {firstName, lastName, email, company} = await customersAPI.findAll(id);
+            const {firstName, lastName, email, company} = await customersAPI.findAll(id);
             setCustomer({firstName, lastName, email, company});
+            setLoading(false);
         } catch (error) {
             history.replace("/customers");
         }
@@ -36,12 +39,13 @@ const Customerpage = ({match, history}) => {
     //chargment du client si besoin au chargement du composant ou au chargement de l'identifiant
     useEffect(() => {
         if (id !== "new") {
+            setLoading(true);
             setEditing(true);
             fetchCustomer(id);
         }
     }, [id]);
 
-    //gestion des chjangements des imputs du formulaire
+    //gestion des changements des imputs du formulaire
     const handleChange = ({currentTarget}) => {
         const { name, value } = currentTarget;
         setCustomer({...customer, [name]: value });
@@ -51,13 +55,15 @@ const Customerpage = ({match, history}) => {
     const handleSubmit = async event => {
         event.preventDefault();
         try {
+            setErrors({});
             if (editing) {
                 await customersAPI.update(id, customer);
             } else {
                 await customersAPI.create(customer);
+                toast.success("le pige* client a bien été créé");
                 history.replace("/customers");
             }
-            setErrors({});
+
         } catch ({ response }) {
             const {violations} = response.data;
             if (violations) {
@@ -66,6 +72,7 @@ const Customerpage = ({match, history}) => {
                     apiErrors[propertyPath] = message;
                 });
                 setErrors(apiErrors);
+                toast.error("des erreurs dans votre formulaire");
             }
         }
     };
@@ -74,7 +81,7 @@ const Customerpage = ({match, history}) => {
         <>
             {!editing && <h1>Création d'un pige* d'un client</h1> || <h1>Modification du pige$ du client</h1>}
 
-            <form onSubmit={handleSubmit}>
+            {!loading && <form onSubmit={handleSubmit}>
                 <Field
                     name="lastName"
                     label="Nom de famille"
@@ -115,7 +122,8 @@ const Customerpage = ({match, history}) => {
                         Retour à la liste
                     </Link>
                 </div>
-            </form>
+            </form>}
+            {loading && <TableLoader />}
         </>
     );
 };

@@ -4,9 +4,12 @@ import Select from "../components/forms/Select";
 import {Link} from "react-router-dom";
 import customersAPI from "../services/customersAPI";
 import axios from "axios";
+import {toast, ToastContainer} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 const InvoicePage = (props) => {
 
+    const [loading, setLoading] = useState(true);
     const [invoice, setInvoice] = useState({
         amount: "",
         customer: "",
@@ -25,8 +28,10 @@ const InvoicePage = (props) => {
         try {
             const data = await customersAPI.findAll();
             setCustomers(data);
+            setLoading(false);
         } catch (error) {
             console.log(error.response);
+            toast.error("une erreur est survenue");
         }
     }
 
@@ -45,16 +50,18 @@ const InvoicePage = (props) => {
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/invoices", {...invoice, customer: `api/customers/${invoice.customer}`});
             console.log(response);
+            toast.success("l'impôt a bien été enregistré");
+
         } catch (error) {
+            toast.error("une erreur est survenue");
             console.log(error.response);
         }
-
     }
 
     return (
         <>
             <h1>Création d'un impôt</h1>
-            <form onSubmit={handleSubmit}>
+            {!loading && <form onSubmit={handleSubmit}>
                 <Field
                     name="amount"
                     type="number"
@@ -99,7 +106,8 @@ const InvoicePage = (props) => {
                         Retour aux impôts
                     </Link>
                 </div>
-            </form>
+            </form>}
+            {loading && <TableLoader />}
         </>
     );
 };

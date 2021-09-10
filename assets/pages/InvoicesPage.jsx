@@ -3,6 +3,8 @@ import Pagination from "../components/Pagination";
 import InvoicesAPI from "../services/invoicesAPI";
 import moment from "moment";
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -20,6 +22,7 @@ const InvoicesPage = (props) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
     const itemsPerPage = 10;
 
     //permet d'aller récupérer les Invoices auprès de l'API
@@ -27,8 +30,9 @@ const InvoicesPage = (props) => {
         try {
             const data = await InvoicesAPI.findAll();
             setInvoices(data);
+            setLoading(false);
         } catch (error) {
-            console.log(error.response)
+            toast.error("une erreur est survenue lors du chargement des impôts");
         }
     };
 
@@ -53,8 +57,9 @@ const InvoicesPage = (props) => {
         setInvoices(invoices.filter(invoice => invoice.id !== id));
         try {
            await InvoicesAPI.delete(id);
+           toast.success("l'impôt a bien été supprimé");
         } catch(error) {
-            console.log(error.response);
+            toast.error("une erruer est survenue");
             setInvoices(originalInvoices);
         }
     };
@@ -91,7 +96,7 @@ const InvoicesPage = (props) => {
                 <input type="text" onChange={handleSearch} value={search} className="form-control" placeholder="Rechercher ..."/>
             </div>
 
-            <table className="table table-hover">
+            {!loading && <table className="table table-hover">
                 <thead>
                 <tr>
                     <th>Numéro</th>
@@ -107,9 +112,9 @@ const InvoicesPage = (props) => {
                     <tr key={invoice.id}>
                         <td>{invoice.chrono}</td>
                         <td>
-                            <a href="#">
+                            <Link to={"/customers/" + invoice.customer.id}>
                                 {invoice.customer.firstName} {invoice.customer.lastName}
-                            </a>
+                            </Link>
                         </td>
                         <td className="text-center">{formatDate(invoice.sentAt)}</td>
                         <td className="text-center">
@@ -134,7 +139,8 @@ const InvoicesPage = (props) => {
                     </tr>
                 ))}
                 </tbody>
-            </table>
+            </table> }
+            {loading && <TableLoader />}
 
             <Pagination
                 currentPage={currentPage}

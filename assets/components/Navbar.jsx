@@ -1,11 +1,13 @@
 import React from "react";
 import authAPI from "../services/authAPI";
 import {NavLink} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const Navbar = (props) => {
 
     const handleLogout = () => {
         authAPI.logout();
+        toast.info("Vous êtes désormais déconnecté :)");
     };
 
     return (

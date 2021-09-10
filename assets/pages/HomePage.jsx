@@ -20,7 +20,7 @@ const HomePage = (props) => {
                 blandit.</p>
             <small className="text-muted">Donec id elit non mi porta.</small>
         </a>
-    </div> );
+    </div>);
 }
 
 export default HomePage;

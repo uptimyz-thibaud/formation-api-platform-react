@@ -13,6 +13,8 @@ import authAPI from "./services/authAPI";
 import Customerpage from "./pages/Customerpage";
 import InvoicePage from "./pages/InvoicePage";
 import RegisterPage from "./pages/RegisterPage";
+import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //authAPI.setup();
 
@@ -32,6 +34,7 @@ const App = () => {
                 <Route path="/" component={HomePage} />
             </Switch>
         </main>
+            <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
         </HashRouter>
     );
 };
